@@ -95,9 +95,9 @@ const NavBar = () => {
                   onClick={() => setActiveMenu("")}
                 >
                   {theme === "light" ? (
-                    <Image src={logo} alt="logo" width={180} height={100} />
+                    <Image src={logo} alt="logo" width={90} height={90} />
                   ) : (
-                    <Image src={logo} alt="logo" width={180} height={100} />
+                    <Image src={logo} alt="logo" width={90} height={90} />
                   )}
                 </Link>
               ) : (
