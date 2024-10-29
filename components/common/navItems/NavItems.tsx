@@ -71,11 +71,11 @@ const NavItems = ({
                   onClick={() => {
                     setActiveMenu(menu_lavel.toLowerCase());
                   }}
-                  className="flex items-center gap-1 py-2 px-1 text-xs text-[var(--dark)] dark:text-white font-bold capitalize hover:opacity-65"
+                  className="flex items-center gap-1 py-2 px-1 text-xs text-[var(--dark)] dark:text-white font-bold capitalize hover:text-mainColor"
                 >
                   <div
                     className={`${activeMenu === menu_lavel.toLowerCase()
-                      ? "font-bold border-b-2 border-black dark:border-white"
+                      ? "font-bold border-black dark:border-white"
                       : ""
                       }`}
                   >
@@ -108,7 +108,7 @@ const NavItems = ({
                         <Link
                           href={`/${subCategory.slug?.toLowerCase()}`}
                           onClick={() => setActiveMenu(subCategory.menu_lavel.toLowerCase())}
-                          className="block px-2 py-2 text-xs text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white capitalize"
+                          className="block px-2 py-2 text-xs text-gray-700 dark:text-gray-200 hover:bg-mainColor hover:text-white capitalize"
                         >
                           {subCategory.menu_lavel.toLowerCase()}
                         </Link>

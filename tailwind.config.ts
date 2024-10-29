@@ -9,10 +9,16 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      colors: {
+        mainColor: "#a45e20", // Adding custom color
+      },
       backgroundImage: {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
         "gradient-conic":
           "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
+      },
+      fontSize: {
+        lg: "1rem", // Override text-lg to 1rem
       },
     },
     container: {
@@ -26,4 +32,5 @@ const config: Config = {
   },
   plugins: [],
 };
+
 export default config;

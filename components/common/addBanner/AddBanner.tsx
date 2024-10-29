@@ -2,7 +2,6 @@ interface AddBannerProps {
   imgPath: string;
   clss?: string;
 }
-
 const AddBanner = ({ imgPath, clss = "mt-[60px]" }: AddBannerProps) => {
   return (
     <section className={clss}>
