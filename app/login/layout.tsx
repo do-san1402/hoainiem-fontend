@@ -1,7 +1,5 @@
 "use client";
 
-import Footer from "@/components/footer/Footer";
-import NavBar from "@/components/navBar/NavBar";
 import ScrollToTop from "@/components/scrollToTop/ScrollToTop";
 import ThemeWrapper from "@/components/themeWrapper/ThemeWrapper";
 import WebSettingProvider from "@/context/webSettingContext";

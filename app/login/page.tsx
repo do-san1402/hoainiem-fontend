@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import fetcher from "@/utils/fetcher";
 import useSWR from "swr";
 import SearchPageSkeleton from "@/components/skeleton/SearchPageSkeleton";
+import LoginLayout from './layout';
 
 export default function LoginPage() {
   const [currentUrl, setCurrentUrl] = useState("");
@@ -34,6 +35,7 @@ export default function LoginPage() {
   if (isLoading) return <SearchPageSkeleton />;
 
   return (
+    <LoginLayout>
     <div>
       <section className="h-screen bg-gray-200">
         <div className="container mx-auto py-5 h-full">
@@ -110,12 +112,13 @@ export default function LoginPage() {
 
                         <div className="flex items-center justify-center pb-4">
                           <p className="mb-0 mr-2 text-gray-700">Không có tài khoản?</p>
-                          <Link
-                            href="/signup"
-                            className="px-4 py-2 text-white border bg-mainColor rounded-md hover:bg-opacity-70 transition duration-300"
-                          >
-                            Tạo mới
-                          </Link>
+                            <a
+                              href="/signup"
+                              
+                              className="px-4 py-2 text-white border bg-mainColor rounded-md hover:bg-opacity-70 transition duration-300"
+                            >
+                              Tạo mới
+                            </a>
                         </div>
                       </form>
                     </div>
@@ -141,5 +144,6 @@ export default function LoginPage() {
         </div>
       </section>
     </div>
+    </LoginLayout>
   );
 }
