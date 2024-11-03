@@ -101,7 +101,7 @@ const NavBar = () => {
   if (!enabled) return null;
 
   return (
-    <Fragment>
+    <>
       <header className="sticky top-0 z-50 bg-[var(--bg)] dark:bg-[#191c20] shadow-[0px_1px_2px_rgba(0,0,0,0.2)]">
         <div className="container px-4 py-2.5 mx-auto">
           <div className="flex items-center justify-between">
@@ -250,7 +250,7 @@ const NavBar = () => {
           theme={`${theme}`}
         />
       )}
-    </Fragment>
+    </>
   );
 };
 
