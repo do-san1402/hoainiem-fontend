@@ -207,7 +207,10 @@ const NavBar = () => {
                 )}
               </div>
             ) : (
-              <button onClick={() => setShowLoginPopup(true)} className="text-white">
+              <button onClick={() =>
+                //  setShowLoginPopup(true)
+                } 
+              className="text-white">
                 Login
               </button>
             )}
