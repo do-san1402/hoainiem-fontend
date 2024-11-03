@@ -10,7 +10,7 @@ import { useTheme } from "next-themes";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { Fragment, useContext, useEffect, useState } from "react";
+import React, { Fragment, useContext, useEffect, useState } from "react";
 import NavItems from "../common/navItems/NavItems";
 import SideBar from "../sideBar/SideBar";
 import bdtask from "../../public/images/Bdtask-Logo-blk.png";
@@ -207,9 +207,7 @@ const NavBar = () => {
                 )}
               </div>
             ) : (
-              <button onClick={() =>
-                //  setShowLoginPopup(true)
-                } 
+              <button 
               className="text-white">
                 Login
               </button>
