@@ -2,8 +2,9 @@
 
 import instance from "@/utils/instance";
 import Link from 'next/link';
-import { useEffect, useState } from "react";
+import {useState } from "react";
 import { useRouter } from 'next/navigation';
+import useCsrfToken from '@/hooks/useCsrfToken';
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
@@ -12,8 +13,7 @@ export default function LoginPage() {
   const [isLoading, setIsLoading] = useState(false);
   
   const router = useRouter();
-
-  const token = document.head.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
+  const csrfToken = useCsrfToken();
 
   const login = async (email: string, password: string) => {
     try {
@@ -22,15 +22,15 @@ export default function LoginPage() {
         password,
       }, {
         headers: {
-          'X-CSRF-TOKEN': token,
+          'X-CSRF-TOKEN': csrfToken,
         },
+        withCredentials: true,
       });
       return { success: true, data: response.data };
     } catch (error: any) {
       return { success: false, message: error.response?.data.message || 'Đăng nhập thất bại' };
     }
   };
-  
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
