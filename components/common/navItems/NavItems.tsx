@@ -101,6 +101,7 @@ const NavItems = ({
                 </Link>
 
                 {/* Dropdown menu */}
+  
                 {categorieslevelone && categorieslevelone.length > 0 && (
                   <ul className="absolute hidden group-hover:block z-10 w-100 bg-white divide-y divide-gray-100 rounded-lg shadow-lg dark:bg-gray-700">
                     {categorieslevelone.map((subCategory) => (

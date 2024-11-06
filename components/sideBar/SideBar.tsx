@@ -8,6 +8,8 @@ import fetcher from "@/utils/fetcher";
 import Link from "next/link";
 import { Fragment } from "react";
 import useSWR from "swr";
+import useAuth from '@/hooks/useAuth';
+import { useRouter } from "next/navigation";
 
 type HandleSidebar = () => void;
 type HandleTheme = () => void;
@@ -45,6 +47,14 @@ const SideBar = ({ handleSidebar, handleTheme, theme }: SideBarProps) => {
 
   let content;
 
+  const { logout } = useAuth();
+  const router = useRouter();
+  const handleLogout = () => {
+    logout();
+    router.push('/');
+    window.location.reload(); 
+  };
+
   if (error) content = <div>There was an Error!</div>;
   if (isLoading) content = <div>Loading.....</div>;
   if (data)
@@ -65,7 +75,7 @@ const SideBar = ({ handleSidebar, handleTheme, theme }: SideBarProps) => {
                         {menu_lavel}
                       </Link>
                       <div className="shrink-0 hover:bg-gray-100 dark:text-white group-open:bg-gray-50 group-open:dark:bg-[#3f3f40] dark:hover:bg-gray-700 w-[15%] justify-center h-full flex items-center py-[14px]">
-                        <span className="transition duration-300 group-open:-rotate-180">
+                        <span className="transition duration-300 group-open:-rotate-180 w-5 hover:text-mainColor">
                           <ChevronDownIcon />
                         </span>
                       </div>
@@ -76,7 +86,7 @@ const SideBar = ({ handleSidebar, handleTheme, theme }: SideBarProps) => {
                         return (
                           <Link
                             key={menu_content_id}
-                            className="flex items-center pl-5 pr-2 py-3 text-lg md:text-base text-gray-900 hover:bg-gray-100 border-t-[1px] dark:text-white dark:hover:bg-gray-700"
+                            className="flex items-center pl-5 pr-2 py-3 text-lg md:text-base text-gray-900 hover:bg-mainColor border-t-[1px] dark:text-white dark:hover:bg-gray-700"
                             href={`/${slug}`}
                           >
                             {menu_lavel}
@@ -99,6 +109,30 @@ const SideBar = ({ handleSidebar, handleTheme, theme }: SideBarProps) => {
             </Fragment>
           );
         })}
+        <li className="border-b-[1px] last:border-none">
+          <Link
+            className="flex items-center px-2 py-3 text-lg md:text-base text-gray-900 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
+            href="/add-post"
+          >
+            Thêm bài đăng
+          </Link>
+        </li>
+        <li className="border-b-[1px] last:border-none">
+          <Link
+            className="flex items-center px-2 py-3 text-lg md:text-base text-gray-900 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
+            href="/edit-profile"
+          >
+            Chỉnh sửa hồ sơ
+          </Link>
+        </li>
+        <li className="border-b-[1px] last:border-none">
+          <button
+            className="flex items-center px-2 py-3 text-lg md:text-base text-gray-900 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700 w-full text-left"
+            onClick={handleLogout}
+          >
+            Đăng xuất
+          </button>
+        </li>
       </ul>
     );
 
@@ -124,11 +158,11 @@ const SideBar = ({ handleSidebar, handleTheme, theme }: SideBarProps) => {
           </div>
           <button
             type="button"
-            className="w-10 h-10 text-center text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
+            className="w-10 h-10 text-center text-gray-400 bg-transparent hover:bg-gray-200 hover:text-mainColor rounded-lg flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
             onClick={handleSidebar}
           >
             <XIcon />
-            <span className="sr-only">বন্ধ করুন</span>
+            <span className="sr-only"></span>
           </button>
         </div>
         <div className="mx-2 py-4 overflow-y-auto sidebar-scrollbar-none">

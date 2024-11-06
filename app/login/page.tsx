@@ -1,52 +1,26 @@
 "use client";
 
-import instance from "@/utils/instance";
 import Link from 'next/link';
-import {useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from 'next/navigation';
-import useCsrfToken from '@/hooks/useCsrfToken';
+import useAuth from '@/hooks/useAuth';
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [errorMessage, setErrorMessage] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
-  
   const router = useRouter();
-  const csrfToken = useCsrfToken();
+  const { isAuthenticated, login, errorMessage } = useAuth();
 
-  const login = async (email: string, password: string) => {
-    try {
-      const response = await instance.post('/login', {
-        email,
-        password,
-      }, {
-        headers: {
-          'X-CSRF-TOKEN': csrfToken,
-        },
-        withCredentials: true,
-      });
-      return { success: true, data: response.data };
-    } catch (error: any) {
-      return { success: false, message: error.response?.data.message || 'Đăng nhập thất bại' };
-    }
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: any) => {
     e.preventDefault();
-    setIsLoading(true);
-    setErrorMessage("");
-
-    const result = await login(email, password);
-
-    if (result.success) {
-      router.push('/');
-    } else {
-      setErrorMessage(result.message);
-    }
-    setIsLoading(false);
+    await login(email, password);
   };
 
+  useEffect(() => {
+    if (isAuthenticated) {
+      window.location.href = '/';
+    }
+  }, [isAuthenticated, router]);
 
   return (
     <div className="h-screen bg-gray-200">
@@ -96,8 +70,8 @@ export default function LoginPage() {
                       </div>
 
                       <div className="text-center pt-1 mb-6 pb-1">
-                        <button type="submit" className="w-full py-2 mb-3 text-white bg-mainColor rounded-md hover:bg-opacity-70 transition duration-300" disabled={isLoading}>
-                          {isLoading ? 'Đang đăng nhập...' : 'Đăng nhập'}
+                        <button type="submit" className="w-full py-2 mb-3 text-white bg-mainColor rounded-md hover:bg-opacity-70 transition duration-300">
+                          Đăng nhập
                         </button>
                         <Link href="/forgot-password" className="text-sm text-gray-600 hover:text-mainColor hover:underline transition duration-300">
                           Quên mật khẩu?

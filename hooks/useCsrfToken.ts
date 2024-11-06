@@ -10,8 +10,6 @@ export default function useCsrfToken() {
         const response = await instance.get('/csrf-token', {
           withCredentials: true,
         });
-        console.log(response);  
-
         setCsrfToken(response.data.csrf_token);
       } catch (error) {
         console.error('Lỗi khi lấy CSRF token:', error);

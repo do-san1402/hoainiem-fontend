@@ -4,7 +4,6 @@ import { WebSettingContext } from "@/context/webSettingContext";
 import MenuIcon from "@/public/icons/MenuIcon";
 import SearchIcon from "@/public/icons/SearchIcon";
 import ProfileIcon from "@/public/icons/ProfileIcon";
-import SunIcon from "@/public/icons/SunIcon";
 import XIcon from "@/public/icons/XIcon";
 import { useTheme } from "next-themes";
 import Image from "next/image";
@@ -13,10 +12,7 @@ import { useRouter } from "next/navigation";
 import React, { Fragment, useContext, useEffect, useState } from "react";
 import NavItems from "../common/navItems/NavItems";
 import SideBar from "../sideBar/SideBar";
-import bdtask from "../../public/images/Bdtask-Logo-blk.png";
-import bdtask_dark from "../../public/images/Bdtask-Logo-white.png";
-import NavbarSkeleton from "../skeleton/NavbarSkeleton";
-import axios from "axios";
+import useAuth from '@/hooks/useAuth';
 
 const NavBar = () => {
   const { theme, setTheme } = useTheme();
@@ -27,24 +23,8 @@ const NavBar = () => {
   const { data, isLoading } = useContext(WebSettingContext);
   const [activeMenu, setActiveMenu] = useState<string | undefined>("");
   const logo = data?.logo;
-  const [setShowLoginPopup] = useState(false);
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [user, setUser] = useState(null);
   const router = useRouter();
-  const [rememberMe, setRememberMe] = useState(false);
-  const [showPassword, setShowPassword] = useState(false);
-
-  const handleLogout = async () => {
-    try {
-      await axios.post("/api/logout");
-      setUser(null);
-      setIsAuthenticated(false);
-      router.push("/");
-    } catch (error) {
-      console.error("Logout error:", error);
-    }
-  };
-
+  const { isAuthenticated } = useAuth();
 
   /**
    * Handle search form submission and navigate to search results.
@@ -149,21 +129,16 @@ const NavBar = () => {
                 </button>
               </div> */}
               <div className="flex items-center justify-center print:hidden">
-                <button
-                  className="p-3 last:pr-0"
-                  aria-label="register"
-                  onClick={() => {
-                    if (isAuthenticated) {
-                      // setShowLoginPopup(true);
-                    } else {
-                      router.push("/login");
-                    }
-                  }}
-                >
-                  <div className="text-black">
-                    <ProfileIcon/>
-                  </div>
-                </button>
+                {!isAuthenticated && (
+                  <button
+                    aria-label="register"
+                    onClick={() => router.push("/login")}
+                  >
+                    <div className="text-black">
+                      <ProfileIcon />
+                    </div>
+                  </button>
+                )}
               </div>
 
               <button
@@ -182,36 +157,6 @@ const NavBar = () => {
                 <MenuIcon />
               </button>
             </div>
-          </div>
-          <div>
-            {isAuthenticated ? (
-              <div className="relative inline-block">
-                <button className="text-white" onClick={() => setShowSidebar(!showSidebar)}>
-                  {/* {user?.name || "Profile"} */}
-                </button>
-                {showSidebar && (
-                  <div className="absolute right-0 mt-2 w-48 bg-white rounded shadow-md">
-                    <button
-                      onClick={() => router.push("/profile")}
-                      className="block w-full px-4 py-2 text-left text-gray-700 hover:bg-gray-100"
-                    >
-                      Edit Profile
-                    </button>
-                    <button
-                      onClick={handleLogout}
-                      className="block w-full px-4 py-2 text-left text-gray-700 hover:bg-gray-100"
-                    >
-                      Logout
-                    </button>
-                  </div>
-                )}
-              </div>
-            ) : (
-              <button 
-              className="text-white">
-                Login
-              </button>
-            )}
           </div>
         </div>
       </header>
