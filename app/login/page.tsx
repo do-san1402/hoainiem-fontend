@@ -33,7 +33,9 @@ export default function LoginPage() {
                 <div className="w-full lg:w-1/2">
                   <div className="p-8 md:p-10 mx-auto">
                     <div className="text-center">
-                      <img src="/images/lotus.webp" alt="logo" className="w-48 mx-auto" />
+                      <Link href="/">
+                        <img src="/images/logo-new.png" alt="logo" className="w-[7rem] mx-auto" />
+                      </Link>
                     </div>
 
                     <form onSubmit={handleSubmit} className="mt-6">
@@ -49,7 +51,7 @@ export default function LoginPage() {
                           value={email}
                           onChange={(e) => setEmail(e.target.value)}
                           required
-                          className="w-full px-4 py-2 text-base text-gray-700 bg-white border border-gray-300 rounded-md focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
+                          className="w-full px-4 py-2 text-base text-gray-700 bg-white border border-gray-300 rounded-md outline-mainColor focus:ring-1"
                           placeholder="example@email.com"
                         />
                       </div>
@@ -64,8 +66,8 @@ export default function LoginPage() {
                           value={password}
                           onChange={(e) => setPassword(e.target.value)}
                           required
-                          className="w-full px-4 py-2 text-base text-gray-700 bg-white border border-gray-300 rounded-md focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
-                          placeholder="••••••••"
+                          className="w-full px-4 py-2 text-base text-gray-700 bg-white border border-gray-300 rounded-md outline-mainColor"
+                          placeholder="Nhập mật khẩu"
                         />
                       </div>
 

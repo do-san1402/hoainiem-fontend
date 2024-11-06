@@ -44,9 +44,34 @@ export default function useAuth() {
     setIsAuthenticated(false);
   };
 
+  const sendForgotPasswordEmail = async (email: string) => {
+    try {
+      const response = await instance.post(
+        "/forgot-password",
+        { email },
+        {
+          headers: { "X-CSRF-TOKEN": csrfToken },
+          withCredentials: true,
+        }
+      );
+      return { message: response.data.message, success: true };
+    } catch (error: any) {
+      const errorMessage =
+        error.response?.data?.data ||
+        error.response?.data?.message ||
+        "Đã xảy ra lỗi khi gửi yêu cầu. Vui lòng thử lại.";
+      return {
+        message: errorMessage,
+        success: false,
+      };
+    }
+  };
+  
+  
   useEffect(() => {
     checkAuthStatus();
   }, []);
 
-  return { isAuthenticated, login, logout, errorMessage };
+  return { isAuthenticated, login, logout, errorMessage, sendForgotPasswordEmail };
 }
+
