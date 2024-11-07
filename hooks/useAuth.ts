@@ -72,6 +72,33 @@ export default function useAuth() {
     checkAuthStatus();
   }, []);
 
-  return { isAuthenticated, login, logout, errorMessage, sendForgotPasswordEmail };
+  const register = async (email: string, full_name: string, contact_no: string, birth_date: string, 
+      address_one: string, sex: string, password: string, password_confirmation: string) => {
+    try {
+      const response = await instance.post('/register', {
+        email,
+        full_name,
+        contact_no,
+        birth_date,
+        address_one,
+        sex,
+        password,
+        password_confirmation,
+      }, {
+        headers: { 'X-CSRF-TOKEN': csrfToken },
+        withCredentials: true,
+      });
+  
+      return { success: true, data: response.data };
+    } catch (error: any) {
+      const errorMessage =
+        error.response?.data?.message ||
+        'Đã xảy ra lỗi khi đăng ký. Vui lòng thử lại.';
+      return { success: false, message: errorMessage };
+    }
+  };
+  
+
+  return { isAuthenticated, login, logout, register, errorMessage, sendForgotPasswordEmail };
 }
 

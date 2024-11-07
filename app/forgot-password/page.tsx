@@ -2,9 +2,6 @@
 
 import Link from 'next/link';
 import { useState } from "react";
-import fetcher from "@/utils/fetcher";
-import useSWR from "swr";
-import SearchPageSkeleton from "@/components/skeleton/SearchPageSkeleton";
 import { useRouter } from 'next/navigation';
 import useAuth from "@/hooks/useAuth";
 import { useEffect } from "react";
@@ -17,32 +14,13 @@ export default function ForgotPasswordPage() {
   const [isWaiting, setIsWaiting] = useState(false);
   const [timeLeft, setTimeLeft] = useState(60);
 
-  const { data, error, isLoading } = useSWR("/latest-post", fetcher);
-
-  useEffect(() => {
-    const savedTimeLeft = localStorage.getItem("timeLeft");
-    const savedIsWaiting = localStorage.getItem("isWaiting");
-
-    if (savedTimeLeft) {
-      setTimeLeft(Number(savedTimeLeft));
-    }
-    if (savedIsWaiting) {
-      setIsWaiting(savedIsWaiting === "true");
-    }
-  }, []);
-
-  useEffect(() => {
-    localStorage.setItem("timeLeft", timeLeft.toString());
-    localStorage.setItem("isWaiting", isWaiting.toString());
-  }, [timeLeft, isWaiting]);
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const result = await sendForgotPasswordEmail(email);
-    setMessage({ text: result.message, type: result.success ? "success" : "error" });
-
     setIsWaiting(true);
     setTimeLeft(60);
+
+    const result = await sendForgotPasswordEmail(email);
+    setMessage({ text: result.message, type: result.success ? "success" : "error" });
   };
 
   useEffect(() => {
@@ -55,9 +33,6 @@ export default function ForgotPasswordPage() {
       setIsWaiting(false);
     }
   }, [isWaiting, timeLeft]);
-
-  if (error) return <div>There was an Error!</div>;
-  if (isLoading) return <SearchPageSkeleton />;
 
   return (
     <div className="max-w-4xl mx-auto font-[sans-serif] p-6">
@@ -103,10 +78,17 @@ export default function ForgotPasswordPage() {
 
           <button
             type="submit"
-            className="p-3 text-sm font-semibold tracking-wider rounded-md text-white bg-mainColor hover:bg-mainColor/70 focus:outline-none"
+            className="p-3 text-sm flex items-center font-semibold tracking-wider rounded-md text-white bg-mainColor hover:bg-mainColor/70 focus:outline-none"
             disabled={isWaiting}
           >
-            {isWaiting ? `Vui lòng đợi ${timeLeft}s` : "Gửi email xác nhận"}
+            {isWaiting ? (
+              <>
+                <span className="inline-block w-4 h-4 border-2 border-gray-300 border-t-mainColor rounded-full animate-spin mr-2"></span>
+                Gửi lại trong {timeLeft}s
+              </>
+            ) : (
+              "Gửi email xác nhận"
+            )}
           </button>
         </div>
       </form>

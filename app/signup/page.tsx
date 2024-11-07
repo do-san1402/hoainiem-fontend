@@ -4,10 +4,40 @@ import Link from 'next/link';
 import { useEffect, useState } from "react";
 import fetcher from "@/utils/fetcher";
 import useSWR from "swr";
+import { useRouter } from 'next/navigation';
 import SearchPageSkeleton from "@/components/skeleton/SearchPageSkeleton";
+import useAuth from "@/hooks/useAuth";
+
+interface FormValues {
+  email: string;
+  contact_no: string;
+  full_name: string;
+  sex: string;
+  birth_date: string;
+  address_one: string;
+  password: string;
+  cpassword: string;
+}
+
+interface FormErrors {
+  [key: string]: string;
+}
 
 export default function SignUpPage() {
+  const router = useRouter();
+  const { register } = useAuth(); 
   const [currentUrl, setCurrentUrl] = useState("");
+  const [formValues, setFormValues] = useState<FormValues>({
+    email: "",
+    contact_no: "",
+    full_name: "",
+    sex: "",
+    birth_date: "",
+    address_one: "",
+    password: "",
+    cpassword: ""
+  });
+  const [formErrors, setFormErrors] = useState<FormErrors>({});
   const {
     data,
     error,
@@ -18,118 +48,229 @@ export default function SignUpPage() {
   );
 
   useEffect(() => {
-    const currentUrl = window.location.href;
-    setCurrentUrl(currentUrl);
+    setCurrentUrl(window.location.href);
   }, []);
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
+  const validate = () => {
+    const errors: FormErrors = {};
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (!formValues.email) {
+      errors.email = "Vui lòng nhập địa chỉ email.";
+    } else if (!emailPattern.test(formValues.email)) {
+      errors.email = "Địa chỉ email không hợp lệ.";
+    }
+
+    if (!formValues.contact_no) {
+      errors.contact_no = "Vui lòng nhập số điện thoại.";
+    }
+
+    if (!formValues.full_name) {
+      errors.full_name = "Vui lòng nhập họ và tên.";
+    }
+
+    if (!formValues.sex) {
+      errors.sex = "Vui lòng chọn giới tính.";
+    }
+
+    if (!formValues.birth_date) {
+      errors.birth_date = "Vui lòng nhập ngày sinh.";
+    }
+
+    if (!formValues.address_one) {
+      errors.address_one = "Vui lòng nhập địa chỉ.";
+    }
+
+    if (!formValues.password) {
+      errors.password = "Vui lòng nhập mật khẩu.";
+    } else if (formValues.password.length < 8) {
+      errors.password = "Mật khẩu phải có ít nhất 8 ký tự.";
+    }
+
+    if (formValues.password !== formValues.cpassword) {
+      errors.cpassword = "Mật khẩu xác nhận không khớp.";
+    }
+
+    setFormErrors(errors);
+    return Object.keys(errors).length === 0;
   };
 
-  if (error) return <div>There was an Error!</div>;
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    const { name, value } = e.target;
+    setFormValues({
+      ...formValues,
+      [name]: value
+    });
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    if (validate()) {
+      const { success, message } = await register(
+        formValues.email,
+        formValues.full_name,
+        formValues.contact_no,
+        formValues.birth_date,
+        formValues.address_one,
+        formValues.sex,
+        formValues.password,
+        formValues.cpassword
+      );
+
+      if (success) {
+        router.push('/login');
+      } else {
+        setFormErrors({ general: message });
+      }
+    }
+  };
+
+  if (error) return <div>Đã xảy ra lỗi!</div>;
 
   if (isLoading) return <SearchPageSkeleton />;
+
   return (
     <div className="max-w-4xl mx-auto font-[sans-serif] p-6">
       <div className="text-center mb-16">
         <Link href="/">
           <img src="/images/logo-new.png" alt="logo" className="w-[7rem] mx-auto" />
         </Link>
-        <h4 className="text-gray-800 text-base font-semibold mt-6">
-          Sign up into your account
+        <h4 className="text-gray-800 text-base font-semibold mt-7">
+          Đăng ký tài khoản
         </h4>
       </div>
 
-      <form>
+      <form onSubmit={handleSubmit}>
         <div className="grid sm:grid-cols-2 gap-8">
           <div>
-            <label className="text-gray-800 text-sm mb-2 block">Email Id</label>
+            <label className="text-gray-800 text-sm mb-2 block">Địa chỉ email</label>
             <input
               name="email"
               type="text"
-              className="bg-gray-100 w-full text-gray-800 text-sm px-4 py-3.5 rounded-md focus:bg-transparent outline-blue-500 transition-all"
-              placeholder="Enter email"
+              value={formValues.email}
+              onChange={handleChange}
+              className="bg-gray-100 w-full text-gray-800 text-sm px-4 py-3.5 rounded-md focus:bg-transparent outline-mainColor transition-all"
+              placeholder="Nhập email"
             />
+            {formErrors.email && <span className="text-red-500 text-sm">{formErrors.email}</span>}
           </div>
+
           <div>
-            <label className="text-gray-800 text-sm mb-2 block">Mobile No.</label>
+            <label className="text-gray-800 text-sm mb-2 block">Số điện thoại</label>
             <input
-              name="number"
+              name="contact_no"
               type="number"
-              className="bg-gray-100 w-full text-gray-800 text-sm px-4 py-3.5 rounded-md focus:bg-transparent outline-blue-500 transition-all"
-              placeholder="Enter mobile number"
+              value={formValues.contact_no}
+              onChange={handleChange}
+              className="bg-gray-100 w-full text-gray-800 text-sm px-4 py-3.5 rounded-md focus:bg-transparent outline-mainColor transition-all"
+              placeholder="Nhập số điện thoại"
             />
+            {formErrors.contact_no && <span className="text-red-500 text-sm">{formErrors.contact_no}</span>}
           </div>
+
           <div>
-            <label className="text-gray-800 text-sm mb-2 block">Nick Name</label>
+            <label className="text-gray-800 text-sm mb-2 block">Họ & tên</label>
             <input
-              name="nick_name"
+              name="full_name"
               type="text"
-              className="bg-gray-100 w-full text-gray-800 text-sm px-4 py-3.5 rounded-md focus:bg-transparent outline-blue-500 transition-all"
-              placeholder="Enter nick name"
+              value={formValues.full_name}
+              onChange={handleChange}
+              className="bg-gray-100 w-full text-gray-800 text-sm px-4 py-3.5 rounded-md focus:bg-transparent outline-mainColor transition-all"
+              placeholder="Nhập họ & tên"
             />
+            {formErrors.full_name && <span className="text-red-500 text-sm">{formErrors.full_name}</span>}
           </div>
-          <div>
-            <label className="text-gray-800 text-sm mb-2 block">Sex</label>
+
+          <div className="relative">
+            <label className="text-gray-800 text-sm mb-2 block">Giới tính</label>
             <select
               name="sex"
-              className="bg-gray-100 w-full text-gray-800 text-sm px-4 py-3.5 rounded-md focus:bg-transparent outline-blue-500 transition-all"
+              value={formValues.sex}
+              onChange={handleChange}
+              className="bg-gray-100 w-full text-gray-800 text-sm px-4 py-3.5 rounded-md focus:bg-transparent outline-mainColor transition-all appearance-none pr-10"
             >
-              <option value="">Select Gender</option>
-              <option value="Male">Male</option>
-              <option value="Female">Female</option>
+              <option value="">Chọn giới tính</option>
+              <option value="Male">Nam</option>
+              <option value="Female">Nữ</option>
             </select>
+            {formErrors.sex && <span className="text-red-500 text-sm">{formErrors.sex}</span>}
+            <div className="absolute right-4 top-[29px] bottom-0 flex items-center pointer-events-none">
+              <svg className="w-5 h-5 text-gray-600" fill="currentColor" viewBox="0 0 20 20">
+                <path d="M5.23 7.21a.75.75 0 011.06.02L10 10.94l3.71-3.71a.75.75 0 111.06 1.06l-4.24 4.25a.75.75 0 01-1.06 0L5.23 8.27a.75.75 0 01.02-1.06z" />
+              </svg>
+            </div>
           </div>
+
           <div>
-            <label className="text-gray-800 text-sm mb-2 block">Birth Date</label>
+            <label className="text-gray-800 text-sm mb-2 block">Ngày sinh</label>
             <input
               name="birth_date"
               type="date"
-              className="bg-gray-100 w-full text-gray-800 text-sm px-4 py-3.5 rounded-md focus:bg-transparent outline-blue-500 transition-all"
+              value={formValues.birth_date}
+              onChange={handleChange}
+              className="bg-gray-100 w-full text-gray-800 text-sm px-4 py-3.5 rounded-md focus:bg-transparent outline-mainColor transition-all"
             />
+            {formErrors.birth_date && <span className="text-red-500 text-sm">{formErrors.birth_date}</span>}
           </div>
+
           <div>
-            <label htmlFor="address_one" className="block text-sm font-medium text-gray-700">Address Line One</label>
-            <input type="text" id="address_one" name="address_one" placeholder="Address Line One" className="mt-1 p-2 border rounded w-full" />
+            <label className="text-gray-800 text-sm mb-2 block">Địa chỉ</label>
+            <input
+              name="address_one"
+              type="text"
+              value={formValues.address_one}
+              onChange={handleChange}
+              className="bg-gray-100 w-full text-gray-800 text-sm px-4 py-3.5 rounded-md focus:bg-transparent outline-mainColor transition-all"
+              placeholder="Nhập địa chỉ"
+            />
+            {formErrors.address_one && <span className="text-red-500 text-sm">{formErrors.address_one}</span>}
           </div>
+
           <div>
-            <label htmlFor="city" className="block text-sm font-medium text-gray-700">City</label>
-            <input type="text" id="city" name="city" placeholder="City" className="mt-1 p-2 border rounded w-full" />
-          </div>
-          <div>
-            <label htmlFor="state" className="block text-sm font-medium text-gray-700">State</label>
-            <input type="text" id="state" name="state" placeholder="State" className="mt-1 p-2 border rounded w-full" />
-          </div>
-          <div>
-            <label className="text-gray-800 text-sm mb-2 block">Password</label>
+            <label className="text-gray-800 text-sm mb-2 block">Mật khẩu</label>
             <input
               name="password"
               type="password"
-              className="bg-gray-100 w-full text-gray-800 text-sm px-4 py-3.5 rounded-md focus:bg-transparent outline-blue-500 transition-all"
-              placeholder="Enter password"
+              value={formValues.password}
+              onChange={handleChange}
+              className="bg-gray-100 w-full text-gray-800 text-sm px-4 py-3.5 rounded-md focus:bg-transparent outline-mainColor transition-all"
+              placeholder="Nhập mật khẩu"
             />
+            {formErrors.password && <span className="text-red-500 text-sm">{formErrors.password}</span>}
           </div>
+
           <div>
-            <label className="text-gray-800 text-sm mb-2 block">Confirm Password</label>
+            <label className="text-gray-800 text-sm mb-2 block">Xác nhận mật khẩu</label>
             <input
               name="cpassword"
               type="password"
-              className="bg-gray-100 w-full text-gray-800 text-sm px-4 py-3.5 rounded-md focus:bg-transparent outline-blue-500 transition-all"
-              placeholder="Enter confirm password"
+              value={formValues.cpassword}
+              onChange={handleChange}
+              className="bg-gray-100 w-full text-gray-800 text-sm px-4 py-3.5 rounded-md focus:bg-transparent outline-mainColor transition-all"
+              placeholder="Nhập lại mật khẩu"
             />
+            {formErrors.cpassword && <span className="text-red-500 text-sm">{formErrors.cpassword}</span>}
           </div>
         </div>
 
-        <div className="!mt-12">
+        <div className="mt-12 flex flex-col gap-4 sm:flex-row justify-between">
           <button
             type="button"
-            className="py-3.5 px-7 text-sm font-semibold tracking-wider rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none"
+            onClick={() => router.push('/login')}
+            className="p-3 text-sm font-semibold tracking-wider rounded-md text-white bg-gray-500 hover:bg-gray-300 focus:outline-none"
           >
-            Sign up
+            Quay lại đăng nhập
+          </button>
+
+          <button
+            type="submit"
+            className="p-3 text-sm font-semibold tracking-wider rounded-md text-white bg-mainColor hover:bg-mainColorHover focus:outline-none"
+          >
+            Đăng ký
           </button>
         </div>
       </form>
     </div>
   );
 }
-

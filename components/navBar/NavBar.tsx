@@ -15,16 +15,16 @@ import SideBar from "../sideBar/SideBar";
 import useAuth from '@/hooks/useAuth';
 
 const NavBar = () => {
-  const { theme, setTheme } = useTheme();
+  const {theme, setTheme} = useTheme();
   const [showSidebar, setShowSidebar] = useState(false);
   const [enabled, setEnabled] = useState(false);
   const [showSearch, setShowSearch] = useState(false);
   const [searchText, setSearchText] = useState("");
-  const { data, isLoading } = useContext(WebSettingContext);
+  const {data, isLoading} = useContext(WebSettingContext);
   const [activeMenu, setActiveMenu] = useState<string | undefined>("");
   const logo = data?.logo;
   const router = useRouter();
-  const { isAuthenticated } = useAuth();
+  const {isAuthenticated} = useAuth();
 
   /**
    * Handle search form submission and navigate to search results.
