@@ -38,3 +38,9 @@ We welcome contributions from the frontend community. If you have an interesting
 ## License
 
 This project is licensed under the [MIT License](LICENSE).
+
+
+Root route app
+
+Typescript -> Có Type cho từng param, function và class
+Script thì không

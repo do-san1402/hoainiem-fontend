@@ -46,7 +46,7 @@ const SideBar = ({ handleSidebar, handleTheme, theme }: SideBarProps) => {
   );
 
   let content;
-
+  const { isAuthenticated } = useAuth();
   const { logout } = useAuth();
   const router = useRouter();
   const handleLogout = () => {
@@ -112,27 +112,35 @@ const SideBar = ({ handleSidebar, handleTheme, theme }: SideBarProps) => {
         <li className="border-b-[1px] last:border-none">
           <Link
             className="flex items-center px-2 py-3 text-lg md:text-base text-gray-900 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
-            href="/add-post"
+            href={isAuthenticated ? "/add-post" : "/login"}
           >
             Thêm bài đăng
           </Link>
         </li>
-        <li className="border-b-[1px] last:border-none">
-          <Link
-            className="flex items-center px-2 py-3 text-lg md:text-base text-gray-900 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
-            href="/edit-profile"
-          >
-            Chỉnh sửa hồ sơ
-          </Link>
-        </li>
-        <li className="border-b-[1px] last:border-none">
-          <button
-            className="flex items-center px-2 py-3 text-lg md:text-base text-gray-900 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700 w-full text-left"
-            onClick={handleLogout}
-          >
-            Đăng xuất
-          </button>
-        </li>
+
+        {/* Edit Profile (only visible if authenticated) */}
+        {isAuthenticated && (
+          <li className="border-b-[1px] last:border-none">
+            <Link
+              className="flex items-center px-2 py-3 text-lg md:text-base text-gray-900 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
+              href="/edit-profile"
+            >
+              Chỉnh sửa hồ sơ
+            </Link>
+          </li>
+        )}
+
+        {/* Logout (only visible if authenticated) */}
+        {isAuthenticated && (
+          <li className="border-b-[1px] last:border-none">
+            <button
+              className="flex items-center px-2 py-3 text-lg md:text-base text-gray-900 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700 w-full text-left"
+              onClick={handleLogout}
+            >
+              Đăng xuất
+            </button>
+          </li>
+        )}
       </ul>
     );
 

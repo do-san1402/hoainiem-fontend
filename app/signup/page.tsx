@@ -25,7 +25,7 @@ interface FormErrors {
 
 export default function SignUpPage() {
   const router = useRouter();
-  const { register } = useAuth(); 
+  const { isAuthenticated, register } = useAuth(); 
   const [currentUrl, setCurrentUrl] = useState("");
   const [formValues, setFormValues] = useState<FormValues>({
     email: "",
@@ -37,6 +37,13 @@ export default function SignUpPage() {
     password: "",
     cpassword: ""
   });
+  
+  useEffect(() => {
+    if (isAuthenticated) {
+      window.location.href = '/';
+    }
+  }, [isAuthenticated, router]);
+
   const [formErrors, setFormErrors] = useState<FormErrors>({});
   const {
     data,
@@ -258,7 +265,7 @@ export default function SignUpPage() {
           <button
             type="button"
             onClick={() => router.push('/login')}
-            className="p-3 text-sm font-semibold tracking-wider rounded-md text-white bg-gray-500 hover:bg-gray-300 focus:outline-none"
+            className="p-3 text-sm font-semibold tracking-wider rounded-md text-white bg-gray-600 hover:bg-gray-500 focus:outline-none"
           >
             Quay lại đăng nhập
           </button>

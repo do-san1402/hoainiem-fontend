@@ -30,10 +30,38 @@
   --border-dark: #525255;
 }
 
+@font-face {
+  font-family: 'GreatVibes';
+  src: url('/fonts/GreatVibes-Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Inter';
+  src: url('/fonts/Inter-VariableFont_opsz,wght.ttf') format('truetype');
+  font-weight: 100 900;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Inter-Italic';
+  src: url('/fonts/Inter-Italic-VariableFont_opsz,wght.ttf') format('truetype');
+  font-weight: 100 900;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: 'Questrial';
+  src: url('/fonts/Questrial-Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
 body,
 html {
-  scroll-behavior: smooth !important;
-  font-family: "SolaimanLipi", Arial, sans-serif !important;
+  font-family: 'Questrial', sans-serif;
+  margin: 0;
 }
 
 @layer base {

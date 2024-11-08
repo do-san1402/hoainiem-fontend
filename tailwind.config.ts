@@ -30,6 +30,11 @@ const config: Config = {
       animation: {
         spin: 'spin 1s linear infinite',
       },
+      fontFamily: {
+        greatvibes: ['GreatVibes', 'cursive'],
+        interItalic: ['Inter-Italic', 'sans-serif'],
+        sans: ['Questrial', 'sans-serif'],
+      },
     },
     container: {
       screens: {

@@ -39,8 +39,6 @@ export default function LoginPage() {
                     </div>
 
                     <form onSubmit={handleSubmit} className="mt-6">
-                      {errorMessage && <p className="mb-4 text-red-500">{errorMessage}</p>}
-                      
                       <div className="mb-4">
                         <label htmlFor="email" className="block mb-2 text-sm font-medium text-gray-700">
                           Địa chỉ email
@@ -71,6 +69,8 @@ export default function LoginPage() {
                         />
                       </div>
 
+                      {errorMessage && <p className="mb-4 text-red-500">{errorMessage}</p>}
+
                       <div className="text-center pt-1 mb-6 pb-1">
                         <button type="submit" className="w-full py-2 mb-3 text-white bg-mainColor rounded-md hover:bg-opacity-70 transition duration-300">
                           Đăng nhập
@@ -93,10 +93,10 @@ export default function LoginPage() {
                 {/* Right Side */}
                 <div className="hidden lg:flex lg:w-1/2 items-center bg-gradient-custom-login text-white rounded-tr-3xl rounded-br-3xl p-8 md:p-10">
                   <div>
-                    <h4 className="mb-4 text-xl font-semibold">
+                    <h4 className="mb-4 text-[30px] font-semibold font-greatvibes">
                       Nơi Lưu Giữ Kỷ Niệm Thời Gian
                     </h4>
-                    <p className="text-sm leading-relaxed">
+                    <p className="text-sm leading-relaxed font-interItalic">
                         Chúng ta không chỉ đơn thuần ghi lại những câu chuyện, mà còn gói ghém từng khoảnh khắc của quá khứ.
                         Những ký ức đẹp, những hoài niệm sâu lắng về thời thanh xuân, tình bạn, và gia đình...
                         Tất cả được lưu giữ nơi đây, để mỗi khi tìm lại, bạn như thấy mình quay về những năm tháng cũ, với tất cả cảm xúc tinh khôi và trong trẻo.

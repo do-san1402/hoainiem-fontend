@@ -9,10 +9,17 @@ import { useEffect } from "react";
 export default function ForgotPasswordPage() {
   const router = useRouter();
   const [email, setEmail] = useState("");
-  const { sendForgotPasswordEmail } = useAuth();
+  const { sendForgotPasswordEmail, isAuthenticated } = useAuth();
   const [message, setMessage] = useState<{ text: string; type: string } | null>(null);
   const [isWaiting, setIsWaiting] = useState(false);
   const [timeLeft, setTimeLeft] = useState(60);
+
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      window.location.href = '/';
+    }
+  }, [isAuthenticated, router]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -71,7 +78,7 @@ export default function ForgotPasswordPage() {
           <button
             type="button"
             onClick={() => router.push('/login')}
-            className="p-3 text-sm font-semibold tracking-wider rounded-md text-white bg-gray-500 hover:bg-gray-300 focus:outline-none"
+            className="p-3 text-sm font-semibold tracking-wider rounded-md text-white bg-gray-600 hover:bg-gray-500 focus:outline-none"
           >
             Quay lại đăng nhập
           </button>

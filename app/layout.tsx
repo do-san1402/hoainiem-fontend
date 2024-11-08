@@ -7,9 +7,7 @@ import ThemeWrapper from "@/components/themeWrapper/ThemeWrapper";
 import WebSettingProvider from "@/context/webSettingContext";
 import { usePathname, useSearchParams } from "next/navigation";
 import "react-datepicker/dist/react-datepicker.css";
-
 import "slick-carousel/slick/slick.css";
-
 import "./globals.css";
 import DynamicFavicon from "@/components/dynamicFavicon/DynamicFavicon";
 
