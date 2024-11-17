@@ -26,10 +26,9 @@ type FormErrors = {
 };
 
 export default function EditProfilePage() {
-  const { isAuthenticated } = useAuth(); 
+  const { isAuthenticated } = useAuth();
   const router = useRouter();
-  const [profileImage, setProfileImage] = useState(null);
-
+  const [profileImage, setProfileImage] = useState<string | null>(null);
 
   const [formData, setFormData] = useState<FormData>({
     email: "",
@@ -51,20 +50,16 @@ export default function EditProfilePage() {
     profile_image: "",
   });
   const token = localStorage.getItem("access_token");
+  const userId = localStorage.getItem("user_id");
   if (!token) throw new Error("Token không tồn tại");
+  if (!userId) throw new Error("User không tồn tại");
 
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    // :TODO
-    // if (isAuthenticated === false) {
-    //   router.push('/');
-    //   return;
-    // }
-
     const fetchUserData = async () => {
       try {
-        const response = await instance.get(`/user/detail/5`, {
+        const response = await instance.get(`/user/detail/${userId}`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         const data = response.data.data;
@@ -75,8 +70,11 @@ export default function EditProfilePage() {
           sex: data.sex || "",
           birth_date: data.birth_date || "",
           address_one: data.address_one || "",
-          profile_image: data.profile_image_url || "",
+          profile_image: data.profile_image || "",
         });
+        if (data.profile_image) {
+          setProfileImage(data.profile_image);
+        }
       } catch (error) {
         console.error("Lỗi khi lấy dữ liệu:", error);
       } finally {
@@ -84,9 +82,9 @@ export default function EditProfilePage() {
       }
     };
     fetchUserData();
-    
+
   }, [isAuthenticated, router]);
-  
+
   const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
@@ -94,7 +92,10 @@ export default function EditProfilePage() {
 
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
-      setFormData({ ...formData, profile_image: e.target.files[0] });
+      const selectedFile = e.target.files[0];
+      const imageUrl = URL.createObjectURL(selectedFile);
+      setProfileImage(imageUrl);
+      setFormData({ ...formData, profile_image: selectedFile });
     }
   };
 
@@ -116,7 +117,6 @@ export default function EditProfilePage() {
     if (!formData.contact_no || !/^(03|05|07|08|09)\d{8}$/.test(formData.contact_no)) {
       newErrors.contact_no = "Vui lòng nhập số điện thoại hợp lệ.";
     }
-    
 
     if (!formData.full_name) {
       newErrors.full_name = "Họ và tên là bắt buộc.";
@@ -133,24 +133,20 @@ export default function EditProfilePage() {
     if (!formData.address_one) {
       newErrors.address_one = "Địa chỉ là bắt buộc.";
     }
+    
     if (!formData.profile_image) {
       newErrors.profile_image = "Vui lòng chọn ảnh đại diện của bạn.";
-    } else if (!formData.profile_image.type.startsWith("image/")) {
-      newErrors.profile_image = "File tải lên phải là một ảnh.";
     }
 
     setErrors(newErrors);
     return Object.keys(newErrors).every((key) => newErrors[key as keyof FormErrors] === "");
   };
 
-  
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
   
     if (validate()) {
       const formDataToSubmit = new FormData();
-  
-      // Ensure all fields are being appended correctly
       formDataToSubmit.append("email", formData.email);
       formDataToSubmit.append("contact_no", formData.contact_no);
       formDataToSubmit.append("full_name", formData.full_name);
@@ -158,7 +154,7 @@ export default function EditProfilePage() {
       formDataToSubmit.append("birth_date", formData.birth_date);
       formDataToSubmit.append("address_one", formData.address_one);
   
-      if (formData.profile_image) {
+      if (formData.profile_image && typeof formData.profile_image !== "string") {
         formDataToSubmit.append("profile_image", formData.profile_image);
       }
   
@@ -166,8 +162,8 @@ export default function EditProfilePage() {
         setLoading(true);
   
         const response = await instance.post(
-          `/user/update/5`,
-          formDataToSubmit, // Send the FormData
+          `/user/update/${userId}`,
+          formDataToSubmit,
           {
             headers: {
               "Content-Type": "multipart/form-data",
@@ -176,8 +172,7 @@ export default function EditProfilePage() {
           }
         );
   
-        console.log("Cập nhật thành công:", response.data);
-        alert("Cập nhật thông tin thành công!");
+        // alert("Cập nhật thông tin thành công!");
       } catch (error: any) {
         console.error("Lỗi khi cập nhật thông tin:", error);
         alert(error.response?.data?.message || "Cập nhật không thành công. Vui lòng thử lại.");
@@ -185,8 +180,8 @@ export default function EditProfilePage() {
         setLoading(false);
       }
     }
-  };  
-
+  };
+  
   return (
     <section className="py-[60px]">
       <div className="container px-4 mx-auto">
@@ -293,12 +288,11 @@ export default function EditProfilePage() {
                 {errors.profile_image && <p className="text-red-500 text-sm mt-2">{errors.profile_image}</p>}
               </label>
 
-              {profileImage && (
-                <div className="mt-4">
-                  <img src={profileImage} alt="Ảnh đại diện" className="w-32 h-32 object-cover rounded-full" />
-                </div>
-              )}
-
+              <div>
+                {profileImage && (
+                  <img src={profileImage} alt="Ảnh đại diện" className="w-28 h-28 object-cover rounded-full" />
+                )}
+              </div>
 
               <div className="text-right">
                 <button

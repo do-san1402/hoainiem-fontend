@@ -18,6 +18,7 @@ export default function useAuth() {
         }
       );
       localStorage.setItem("access_token", response.data.access_token);
+      localStorage.setItem("user_id", response.data.user.id); 
       setIsAuthenticated(true);
       setErrorMessage("");
     } catch (error: any) {
@@ -30,7 +31,6 @@ export default function useAuth() {
     try {
       const token = localStorage.getItem("access_token");
       if (!token) {
-        console.warn("Token không tồn tại.");
         setIsAuthenticated(false);
         return;
       }
@@ -48,6 +48,7 @@ export default function useAuth() {
 
   const logout = () => {
     localStorage.removeItem("access_token");
+    localStorage.removeItem("user_id");
     setIsAuthenticated(false);
   };
 
