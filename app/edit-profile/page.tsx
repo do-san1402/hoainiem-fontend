@@ -4,6 +4,7 @@ import { useState, useEffect, ChangeEvent, FormEvent } from "react";
 import instance from "@/utils/instance";
 import useAuth from "@/hooks/useAuth";
 import { useRouter } from 'next/navigation';
+import { toast } from "@/components/themeWrapper/ToastContainer";
 
 type FormData = {
   email: string;
@@ -172,10 +173,10 @@ export default function EditProfilePage() {
           }
         );
   
-        // alert("Cập nhật thông tin thành công!");
+        toast.success("Cập nhật thông tin thành công!"); 
       } catch (error: any) {
         console.error("Lỗi khi cập nhật thông tin:", error);
-        alert(error.response?.data?.message || "Cập nhật không thành công. Vui lòng thử lại.");
+        toast.error(error.response?.data?.message || "Cập nhật không thành công. Vui lòng thử lại."); 
       } finally {
         setLoading(false);
       }
@@ -195,7 +196,6 @@ export default function EditProfilePage() {
               <label className="block">
                 <span className="text-gray-700">Email</span>
                 <input
-                  type="email"
                   name="email"
                   value={formData.email}
                   onChange={handleChange}

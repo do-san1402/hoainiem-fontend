@@ -10,6 +10,8 @@ import "react-datepicker/dist/react-datepicker.css";
 import "slick-carousel/slick/slick.css";
 import "./globals.css";
 import DynamicFavicon from "@/components/dynamicFavicon/DynamicFavicon";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css"; 
 
 export default function RootLayout({
   children,
@@ -31,6 +33,13 @@ export default function RootLayout({
         <ThemeWrapper>
           <WebSettingProvider>
             {!shouldHideNavAndFooter && <NavBar />}
+            <ToastContainer
+              position="top-right"
+              autoClose={5000}
+              hideProgressBar={false}
+              newestOnTop
+              closeButton
+            />
             {children}
             {!shouldHideNavAndFooter && <Footer />}
             <ScrollToTop />
