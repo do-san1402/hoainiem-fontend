@@ -1,7 +1,6 @@
-
 import { useState, useEffect } from "react";
 import instance from "@/utils/instance";
-import useCsrfToken from './useCsrfToken';
+import useCsrfToken from "./useCsrfToken";
 
 export default function useAuth() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -10,37 +9,45 @@ export default function useAuth() {
 
   const login = async (email: string, password: string) => {
     try {
-      const response = await instance.post('/login', { email, password }, {
-        headers: { 'X-CSRF-TOKEN': csrfToken },
-        withCredentials: true,
-      });
-      console.log(response.data.access_token)
-      localStorage.setItem('access_token', response.data.access_token);
+      const response = await instance.post(
+        "/login",
+        { email, password },
+        {
+          headers: { "X-CSRF-TOKEN": csrfToken },
+          withCredentials: true,
+        }
+      );
+      localStorage.setItem("access_token", response.data.access_token);
       setIsAuthenticated(true);
       setErrorMessage("");
     } catch (error: any) {
-      setErrorMessage(error.response?.data.message || 'Đăng nhập thất bại');
+      setErrorMessage(error.response?.data.message || "Đăng nhập thất bại");
       setIsAuthenticated(false);
     }
   };
 
   const checkAuthStatus = async () => {
     try {
-      const token = localStorage.getItem('access_token');
-      if (!token) throw new Error("Token not found");
+      const token = localStorage.getItem("access_token");
+      if (!token) {
+        console.warn("Token không tồn tại.");
+        setIsAuthenticated(false);
+        return;
+      }
 
-      const response = await instance.get('/details', {
-        headers: { 'Authorization': `Bearer ${token}` },
+      const response = await instance.get("/check-auth", {
+        headers: { Authorization: `Bearer ${token}` },
         withCredentials: true,
       });
       setIsAuthenticated(response.data.authenticated);
-    } catch {
+    } catch (error) {
+      console.error("Lỗi khi kiểm tra trạng thái xác thực:", error);
       setIsAuthenticated(false);
     }
   };
 
   const logout = () => {
-    localStorage.removeItem('access_token');
+    localStorage.removeItem("access_token");
     setIsAuthenticated(false);
   };
 
@@ -66,39 +73,55 @@ export default function useAuth() {
       };
     }
   };
-  
-  
+
   useEffect(() => {
     checkAuthStatus();
   }, []);
 
-  const register = async (email: string, full_name: string, contact_no: string, birth_date: string, 
-      address_one: string, sex: string, password: string, password_confirmation: string) => {
+  const register = async (
+    email: string,
+    full_name: string,
+    contact_no: string,
+    birth_date: string,
+    address_one: string,
+    sex: string,
+    password: string,
+    password_confirmation: string
+  ) => {
     try {
-      const response = await instance.post('/register', {
-        email,
-        full_name,
-        contact_no,
-        birth_date,
-        address_one,
-        sex,
-        password,
-        password_confirmation,
-      }, {
-        headers: { 'X-CSRF-TOKEN': csrfToken },
-        withCredentials: true,
-      });
-  
+      const response = await instance.post(
+        "/register",
+        {
+          email,
+          full_name,
+          contact_no,
+          birth_date,
+          address_one,
+          sex,
+          password,
+          password_confirmation,
+        },
+        {
+          headers: { "X-CSRF-TOKEN": csrfToken },
+          withCredentials: true,
+        }
+      );
+
       return { success: true, data: response.data };
     } catch (error: any) {
       const errorMessage =
         error.response?.data?.message ||
-        'Đã xảy ra lỗi khi đăng ký. Vui lòng thử lại.';
+        "Đã xảy ra lỗi khi đăng ký. Vui lòng thử lại.";
       return { success: false, message: errorMessage };
     }
   };
-  
 
-  return { isAuthenticated, login, logout, register, errorMessage, sendForgotPasswordEmail };
+  return {
+    isAuthenticated,
+    login,
+    logout,
+    register,
+    errorMessage,
+    sendForgotPasswordEmail,
+  };
 }
-

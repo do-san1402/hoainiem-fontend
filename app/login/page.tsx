@@ -18,7 +18,7 @@ export default function LoginPage() {
 
   useEffect(() => {
     if (isAuthenticated) {
-      window.location.href = '/';
+      router.push('/')
     }
   }, [isAuthenticated, router]);
 

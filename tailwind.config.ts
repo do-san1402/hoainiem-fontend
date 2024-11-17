@@ -16,7 +16,7 @@ const config: Config = {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
         "gradient-conic":
           "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
-        "gradient-custom-login": "linear-gradient(to right, #ee7724, #d8363a, #dd3675, #b44593)",
+        "gradient-custom-login": "linear-gradient(to right, #c37a3a, #b26a2b, #a0591a, #914a0b)",
       },
       fontSize: {
         lg: "1rem", // Override text-lg to 1rem
