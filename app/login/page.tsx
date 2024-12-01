@@ -48,7 +48,6 @@ export default function LoginPage() {
                           id="email"
                           value={email}
                           onChange={(e) => setEmail(e.target.value)}
-                          required
                           className="w-full px-4 py-2 text-base text-gray-700 bg-white border border-gray-300 rounded-md outline-mainColor focus:ring-1"
                           placeholder="example@email.com"
                         />
@@ -63,7 +62,6 @@ export default function LoginPage() {
                           id="password"
                           value={password}
                           onChange={(e) => setPassword(e.target.value)}
-                          required
                           className="w-full px-4 py-2 text-base text-gray-700 bg-white border border-gray-300 rounded-md outline-mainColor"
                           placeholder="Nhập mật khẩu"
                         />
