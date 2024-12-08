@@ -14,6 +14,7 @@ import {
 import AddCard from "../common/addCard/AddCard";
 import LatestNewsHorizontal from "../common/latestNews/LatestNewsHorizontal";
 import timestampToEnglishDateWithTime from "@/utils/timestampToBangleDateWithTime";
+import Comments from "@/components/comment/Comment";
 
 interface Tag {
   tag: string;
@@ -217,6 +218,9 @@ const SingleNewsDetails = ({
                   </Link>
                 );
               })}
+            </div>
+            <div>
+              <Comments postId={id} />
             </div>
 
             <div className="container mx-auto print:hidden">
