@@ -8,7 +8,7 @@ interface Comment {
     id: number;
     user: { full_name: string };
     content: string;
-    created_at: string;
+    created_at_human: string;
     likes: number;
     isLikedByUser: boolean; // User's like status
     replies?: Comment[]; // Replies to the comment
@@ -254,7 +254,7 @@ const Comments: React.FC<Props> = ({ postId }) => {
                                 <div className="flex items-center gap-2">
                                     <span className="font-medium text-sm">{comment.user.full_name}</span>
                                     <span className="text-xs text-gray-500">
-                                        {new Date(comment.created_at).toLocaleString()}
+                                        {comment.created_at_human}
                                     </span>
                                 </div>
                                 <p className="text-sm text-gray-800 mt-1">{comment.content}</p>
@@ -272,10 +272,8 @@ const Comments: React.FC<Props> = ({ postId }) => {
                                         Phản hồi
                                     </button>
                                 </div>
-
-
                                 {comment.showReplyInput && (
-                                    <div className="mt-4 flex items-start gap-3">
+                                    <div className="mt-4 flex gap-3 items-center                                    ">
                                         {/* <img
                                             src="/default-avatar.png"
                                             alt="Your Avatar"
@@ -288,8 +286,6 @@ const Comments: React.FC<Props> = ({ postId }) => {
                                             className="flex-1 p-3 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500 resize-none"
                                             rows={2}
                                         />
-
-                                        {/* Nút "Hủy" */}
                                         <button
                                             onClick={() => toggleReplyInput(comment.id)}
                                             className="px-4 py-2 text-sm font-medium text-gray-500 hover:bg-gray-100 rounded-md"
@@ -297,7 +293,6 @@ const Comments: React.FC<Props> = ({ postId }) => {
                                             Hủy
                                         </button>
 
-                                        {/* Nút "Phản hồi" */}
                                         <button
                                             onClick={() => handleReplySubmit(comment.id)}
                                             className={`px-4 py-2 text-sm font-medium text-white rounded-md ${comment.replyText?.trim()
@@ -324,7 +319,7 @@ const Comments: React.FC<Props> = ({ postId }) => {
                                                 <div className="flex items-center gap-2">
                                                     <span className="font-medium text-sm">{reply.user.full_name}</span>
                                                     <span className="text-xs text-gray-500">
-                                                        {new Date(reply.created_at).toLocaleString()}
+                                                        {reply.created_at_human}
                                                     </span>
                                                 </div>
                                                 <p className="text-sm text-gray-800 mt-1">{reply.content}</p>
@@ -336,8 +331,6 @@ const Comments: React.FC<Props> = ({ postId }) => {
                                                 </button>
                                             </div>
                                         </li>
-
-
                                     ))}
                                 </ul>
                             </div>
