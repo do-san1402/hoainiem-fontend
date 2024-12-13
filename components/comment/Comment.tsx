@@ -3,6 +3,8 @@
 import React, { useState, useEffect } from "react";
 import useSWR, { mutate } from "swr";
 import instance from "@/utils/instance";
+import LikeIcon from "@/public/icons/LikeIcon";
+import UnlikeIcon from "@/public/icons/UnlikeIcon";
 
 interface Comment {
     id: number;
@@ -48,8 +50,6 @@ const Comments: React.FC<Props> = ({ postId }) => {
     const allComments = data?.comments || [];
     const totalComments = data?.total_comments || 0;
 
-
-
     const parentComments = allComments.filter((comment) => !comment.parent_id);
 
     const handleAddComment = async () => {
@@ -84,12 +84,12 @@ const Comments: React.FC<Props> = ({ postId }) => {
         }
     };
 
-    const handleLike = async (commentId: number, isReply = false) => {
+    const handleLike = async (id: number, isReply = false, commentId?: number) => {
         if (!token) return;
 
         try {
             const response = await instance.post(
-                `/comments/${commentId}/like`,
+                `/comments/${id}/like`,
                 {},
                 {
                     headers: { Authorization: `Bearer ${token}` },
@@ -97,7 +97,7 @@ const Comments: React.FC<Props> = ({ postId }) => {
             );
 
             const updatedComments = allComments.map((comment) => {
-                if (comment.id === commentId && !isReply) {
+                if (!isReply && comment.id === id) {
                     return {
                         ...comment,
                         likes: response.data.total_likes,
@@ -107,7 +107,7 @@ const Comments: React.FC<Props> = ({ postId }) => {
 
                 if (isReply) {
                     const updatedReplies = comment.replies?.map((reply) =>
-                        reply.id === commentId
+                        reply.id === id
                             ? {
                                 ...reply,
                                 likes: response.data.total_likes,
@@ -253,9 +253,7 @@ const Comments: React.FC<Props> = ({ postId }) => {
                             <div className="flex-1">
                                 <div className="flex items-center gap-2">
                                     <span className="font-medium text-sm">{comment.user.full_name}</span>
-                                    <span className="text-xs text-gray-500">
-                                        {comment.created_at_human}
-                                    </span>
+                                    <span className="text-xs text-gray-500">{comment.created_at_human}</span>
                                 </div>
                                 <p className="text-sm text-gray-800 mt-1">{comment.content}</p>
                                 <div className="flex items-center gap-4 mt-2 text-sm">
@@ -263,7 +261,12 @@ const Comments: React.FC<Props> = ({ postId }) => {
                                         onClick={() => handleLike(comment.id)}
                                         className="flex items-center gap-1 text-gray-600 hover:text-red-500"
                                     >
-                                        👍 <span>{comment.likes}</span>
+                                        {comment.isLikedByUser ? (
+                                            <LikeIcon />
+                                        ) : (
+                                            <UnlikeIcon />
+                                        )}
+                                        <span>{comment.likes}</span>
                                     </button>
                                     <button
                                         onClick={() => toggleReplyInput(comment.id)}
@@ -324,10 +327,15 @@ const Comments: React.FC<Props> = ({ postId }) => {
                                                 </div>
                                                 <p className="text-sm text-gray-800 mt-1">{reply.content}</p>
                                                 <button
-                                                    onClick={() => handleLike(reply.id, true)}
                                                     className="flex items-center gap-1 text-gray-600 hover:text-red-500 mt-2 text-sm"
+                                                    onClick={() => handleLike(reply.id, true, comment.id)}
                                                 >
-                                                    👍 <span>{reply.likes}</span>
+                                                    {reply.isLikedByUser ? (
+                                                        <LikeIcon />
+                                                    ) : (
+                                                        <UnlikeIcon />
+                                                    )}
+                                                    <span>{reply.likes}</span>
                                                 </button>
                                             </div>
                                         </li>
@@ -338,7 +346,6 @@ const Comments: React.FC<Props> = ({ postId }) => {
                     </li>
                 ))}
             </ul>
-
         </div>
     );
 };
