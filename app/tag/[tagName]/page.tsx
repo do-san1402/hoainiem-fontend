@@ -261,7 +261,7 @@ export default function TagPage() {
               <div>
                 <div className="mt-3 mb-3 border-[var(--border-color)] border-t-2 border-b-[2px] dark:border-[var(--border-dark)]">
                   <h4 className="text-[var(--primary)] text-xl md:text-2xl dark:text-white">
-                    Latest news
+                    Tin tức nới nhất
                   </h4>
                 </div>
 

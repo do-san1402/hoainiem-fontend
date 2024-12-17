@@ -230,7 +230,7 @@ const SingleNewsDetails = ({
                 </p>
               </div>
 
-              {/* Latest news here */}
+              {/* Tin tức nới nhất here */}
               {/* <LatestNewsHorizontal /> */}
               <div className="grid grid-cols-1 md:grid-cols-12 gap-6 md:after:[&>*:nth-last-child(-n+2)]:h-0 lg:after:[&>*:nth-last-child(-n+2)]:h-full lg:after:[&>*:nth-child(3)]:w-0 lg:after:[&>*]:w-[1px] after:[&>*:last-child]:w-0 after:[&>*]:h-[1px] lg:after:[&>*]:h-full print:hidden dark:after:[&>*]:bg-[var(--border-color)]">
                 {relatedPost?.slice(0, 3)?.map((post) => {

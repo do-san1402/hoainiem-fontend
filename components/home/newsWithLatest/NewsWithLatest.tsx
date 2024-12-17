@@ -136,7 +136,7 @@ const NewsWithLatest = ({ data, end_point, title }: NewsProps) => {
             <div className="border-[var(--border-color)]  dark:border-[var(--border-dark)] border-b-[2px] mb-3 pb-1">
               <div className="flex items-center justify-between">
                 <Link href="/latest-news">
-                  <h2 className="category-text"> {title ?? "Latest news"}</h2>
+                  <h2 className="category-text"> {title ?? "Tin tức nới nhất"}</h2>
                 </Link>
               </div>
             </div>
