@@ -1,7 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   experimental: {
-    appDir: true,
+    // appDir: true,
   },
   images: {
     remotePatterns: [
@@ -15,8 +15,6 @@ const nextConfig = {
       },
     ],
   },
-  metadataBase: new URL(process.env.NEXT_PUBLIC_URL || "http://localhost:3000"),
-
 };
 
 module.exports = nextConfig;
