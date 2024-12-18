@@ -371,7 +371,7 @@ export default function EditNewsPage() {
                 </label>
                 <ReactQuill
                   id="description"
-                  name="description"
+                  data-name="description"
                   modules={modules}
                   value={formData.description}
                   onChange={handleChange}

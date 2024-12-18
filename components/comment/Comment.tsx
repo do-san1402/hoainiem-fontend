@@ -44,7 +44,7 @@ const Comments: React.FC<Props> = ({ postId }) => {
         comments: Comment[];
     }>(
         token ? [`/posts/${postId}/comments`, token] : null,
-        ([url, token]) => fetcherWithAuth(url, token)
+        ([url, token]) => fetcherWithAuth(url, token as string)
     );
 
     const allComments = data?.comments || [];
