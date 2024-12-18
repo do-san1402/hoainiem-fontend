@@ -9,6 +9,7 @@ import useSWR from "swr";
 import fetcher from "@/utils/fetcher";
 import ReactQuill from 'react-quill'; 
 import 'react-quill/dist/quill.snow.css';
+import Image from "next/image";
 
 type SubCategory = {
   menu_lavel: string;
@@ -128,7 +129,7 @@ export default function EditNewsPage() {
     if (isAuthenticated) {
       fetchNewsData();
     }
-  }, [isAuthenticated, categoriesData]);
+  }, [isAuthenticated, categoriesData, token, userId]);
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement> | string
@@ -433,7 +434,7 @@ export default function EditNewsPage() {
                   className="mt-1 block w-full text-gray-500"
                 />
                 {imagePreview && (
-                  <img
+                  <Image
                     src={imagePreview}
                     alt="Xem trước hình ảnh"
                     className="mt-2 w-full max-h-60 object-contain border border-gray-300"

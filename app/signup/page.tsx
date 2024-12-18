@@ -7,6 +7,7 @@ import useSWR from "swr";
 import { useRouter } from 'next/navigation';
 import SearchPageSkeleton from "@/components/skeleton/SearchPageSkeleton";
 import useAuth from "@/hooks/useAuth";
+import Image from "next/image";
 
 interface FormValues {
   email: string;
@@ -141,7 +142,7 @@ export default function SignUpPage() {
     <div className="max-w-4xl mx-auto font-[sans-serif] p-6">
       <div className="text-center mb-16">
         <Link href="/">
-          <img src="/images/logo-new.png" alt="logo" className="w-[7rem] mx-auto" />
+          <Image src="/images/logo-new.png" alt="logo" className="w-[7rem] mx-auto" />
         </Link>
         <h4 className="text-gray-800 text-base font-semibold mt-7">
           Đăng ký tài khoản

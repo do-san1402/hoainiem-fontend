@@ -5,6 +5,7 @@ import { useState } from "react";
 import { useRouter } from 'next/navigation';
 import useAuth from "@/hooks/useAuth";
 import { useEffect } from "react";
+import Image from "next/image";
 
 export default function ForgotPasswordPage() {
   const router = useRouter();
@@ -45,7 +46,7 @@ export default function ForgotPasswordPage() {
     <div className="max-w-4xl mx-auto font-[sans-serif] p-6">
       <div className="text-center mb-16">
         <Link href="/">
-          <img src="/images/logo-new.png" alt="logo" className="w-[7rem] mx-auto" />
+          <Image src="/images/logo-new.png" alt="logo" className="w-[7rem] mx-auto" />
         </Link>
         <h3 className="text-gray-600 text-base font-semibold mt-7">
           Đặt Lại Mật Khẩu

@@ -58,7 +58,7 @@ const CategoryMain = () => {
         }
       })();
     }
-  }, [pageNumber, param.categoryName]);
+  }, [pageNumber, param.categoryName, limit]);
 
   // decide what to render
   //@TODO: When the error occurred

@@ -5,6 +5,7 @@ import instance from "@/utils/instance";
 import useAuth from "@/hooks/useAuth";
 import { useRouter } from 'next/navigation';
 import { toast } from "@/components/themeWrapper/ToastContainer";
+import Image from "next/image";
 
 type FormData = {
   email: string;
@@ -84,7 +85,7 @@ export default function EditProfilePage() {
     };
     fetchUserData();
 
-  }, [isAuthenticated, router]);
+  }, [isAuthenticated, router, token, userId]);
 
   const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
@@ -290,7 +291,7 @@ export default function EditProfilePage() {
 
               <div>
                 {profileImage && (
-                  <img src={profileImage} alt="Ảnh đại diện" className="w-28 h-28 object-cover rounded-full" />
+                  <Image src={profileImage} alt="Ảnh đại diện" className="w-28 h-28 object-cover rounded-full" />
                 )}
               </div>
 

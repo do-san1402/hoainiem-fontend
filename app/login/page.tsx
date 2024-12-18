@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { useState, useEffect } from "react";
 import { useRouter } from 'next/navigation';
 import useAuth from '@/hooks/useAuth';
+import Image from "next/image";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
@@ -34,7 +35,7 @@ export default function LoginPage() {
                   <div className="p-8 md:p-10 mx-auto">
                     <div className="text-center">
                       <Link href="/">
-                        <img src="/images/logo-new.png" alt="logo" className="w-[7rem] mx-auto" />
+                        <Image src="/images/logo-new.png" alt="logo" className="w-[7rem] mx-auto" />
                       </Link>
                     </div>
 
