@@ -1,4 +1,5 @@
 /** @type {import('next').NextConfig} */
+const path = require('path');
 const nextConfig = {
   experimental: {
     // appDir: true,
@@ -14,6 +15,13 @@ const nextConfig = {
         hostname: "**",
       },
     ],
+  },
+  webpack(config, { isServer }) {
+    config.resolve.alias = {
+      ...config.resolve.alias,
+      '@': path.resolve(__dirname, './'),
+    };
+    return config;
   },
 };
 
